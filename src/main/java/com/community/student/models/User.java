@@ -11,7 +11,6 @@ public class User {
 
     @Indexed(unique = true)
     private String userId;
-
     private String password;
 
     public User(String userId, String password) {

@@ -10,7 +10,6 @@ import com.community.student.models.QuestionRepo;
 import java.util.List;
 import java.util.Optional;
 
-
 @RestController
 @RequestMapping("/q")
 public class QuestionController {

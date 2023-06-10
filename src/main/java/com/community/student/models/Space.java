@@ -15,6 +15,7 @@ public class Space {
         this.title = title;
         this.questions = questions;
     }
+    
     public String getId() {
         return id;
     }
