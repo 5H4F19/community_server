@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.community.student.models.Space;
 import com.community.student.models.SpaceRepo;
 
+import jakarta.servlet.http.HttpServletRequest;
+
 @RestController
 @RequestMapping("/s")
 public class SpaceController {
@@ -28,11 +31,17 @@ public class SpaceController {
         return spaceRepo.findAll();
     }
 
-    @PostMapping("/{spaceTitle}")
-    public Space createSpace(@PathVariable String spaceTitle){
+    @PostMapping("")
+    public ResponseEntity<?> createSpace(@RequestBody String spaceTitle){
+        Space space = spaceRepo.findByTitle(spaceTitle);
+        if(space!=null){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Space already exist");
+        }
+
         List<String> questions = new ArrayList<String>();
-        Space space = new Space(spaceTitle,questions);
-        return spaceRepo.save(space);
+        Space new_space = new Space(spaceTitle,questions);
+        Space res_space = spaceRepo.save(new_space);
+        return ResponseEntity.ok(res_space);
     }
 
     @PutMapping("/{spaceId}")

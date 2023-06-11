@@ -25,16 +25,16 @@ public class UserController {
         return userRepo.findAll();
     }
 
-@PostMapping("/{userId}")
-public ResponseEntity<?> createUser(@PathVariable String userId, @RequestBody String password) {
-    User existingUser = userRepo.findByUserId(userId);
+@PostMapping("/register")
+public ResponseEntity<?> createUser(@RequestBody User user) {
+    User existingUser = userRepo.findByUserId(user.getUserId());
     if (existingUser != null) {
         return ResponseEntity.status(HttpStatus.CONFLICT).body("User already exists");
     }
 
-    User user = new User(userId, password);
-    User savedUser = userRepo.save(user);
-    return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
+    User user2 = new User(user.getUserId(), user.getPassword());
+    User savedUser = userRepo.save(user2);
+    return ResponseEntity.status(HttpStatus.CREATED).body(savedUser.getUserId().toString());
 }
 
 @GetMapping("/{userId}")
@@ -62,7 +62,7 @@ public ResponseEntity<?> login(@RequestBody User loginRequest) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
     }
 
-    return ResponseEntity.ok(user.getId());
+    return ResponseEntity.status(HttpStatus.ACCEPTED).body(user.getUserId().toString());
 }
 
 
